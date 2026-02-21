@@ -12,7 +12,7 @@ export function Toggle({
   className = '',
 }: ToggleProps) {
   return (
-    <div className={`bg-slate-800 rounded-lg p-1 inline-flex ${className}`}>
+    <div className={`bg-white/5 border border-white/10 rounded-full p-1 inline-flex backdrop-blur-md ${className}`}>
       {options.map((option) => {
         const isActive = option.value === value;
 
@@ -22,12 +22,12 @@ export function Toggle({
             type="button"
             onClick={() => onChange(option.value)}
             className={`
-              px-4 py-2 text-sm font-medium rounded-md transition-colors
+              px-6 py-2.5 text-sm font-semibold rounded-full transition-all duration-300
               ${isActive
-                ? 'bg-blue-600 text-white'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-electric-blue text-white shadow-[0_4px_12px_rgba(59,130,246,0.3)]'
+                : 'text-ghost/60 hover:text-white hover:bg-white/5'
               }
-            `.trim()}
+            `.trim().replace(/\s+/g, ' ')}
           >
             {option.label}
           </button>

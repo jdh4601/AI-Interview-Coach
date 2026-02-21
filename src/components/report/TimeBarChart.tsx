@@ -5,31 +5,31 @@ interface TimeBarChartProps {
 const MAX_SECONDS = 120;
 
 function getBarColor(answerTime: number): string {
-  if (answerTime > 90) return 'bg-blue-600';
-  if (answerTime >= 60) return 'bg-emerald-500';
-  return 'bg-amber-500';
+  if (answerTime >= 105) return 'bg-signal-red shadow-[0_0_10px_rgba(239,68,68,0.5)]';
+  if (answerTime >= 60) return 'bg-emerald shadow-[0_0_10px_rgba(16,185,129,0.5)]';
+  return 'bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.5)]';
 }
 
 export function TimeBarChart({ questions }: TimeBarChartProps) {
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-5 bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-md">
       {questions.map(({ order, answerTime }) => {
         const widthPercent = Math.min((answerTime / MAX_SECONDS) * 100, 100);
 
         return (
-          <div key={order} className="flex items-center gap-3">
-            <span className="text-xs text-slate-400 font-medium w-8 shrink-0">
+          <div key={order} className="flex items-center gap-4">
+            <span className="text-sm text-electric-blue font-bold tracking-wide w-8 shrink-0">
               Q{order}
             </span>
-            <div className="flex-1 h-6 bg-slate-700 rounded overflow-hidden relative">
+            <div className="flex-1 h-3 bg-white/10 rounded-full overflow-hidden relative">
               <div
-                className={`h-full rounded transition-all duration-500 ${getBarColor(answerTime)}`}
+                className={`h-full rounded-full transition-all duration-1000 ${getBarColor(answerTime)}`}
                 style={{ width: `${widthPercent}%` }}
               />
-              <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-slate-300 font-mono">
-                {answerTime}s
-              </span>
             </div>
+            <span className="text-sm text-ghost w-12 font-data text-right">
+              {answerTime}s
+            </span>
           </div>
         );
       })}

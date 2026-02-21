@@ -71,15 +71,15 @@ export function FileUpload({
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       className={`
-        border-2 border-dashed rounded-xl p-8
-        flex flex-col items-center justify-center gap-2
-        cursor-pointer transition-colors text-center
+        border-2 border-dashed rounded-[2rem] p-12
+        flex flex-col items-center justify-center gap-4
+        cursor-pointer transition-all duration-300 text-center backdrop-blur-sm
         ${isDragOver
-          ? 'border-blue-500 bg-slate-800/50'
-          : 'border-slate-600 hover:border-blue-500 hover:bg-slate-800/50'
+          ? 'border-electric-blue bg-white/10 shadow-[0_0_30px_rgba(59,130,246,0.15)] scale-[1.02]'
+          : 'border-white/20 bg-white/5 hover:border-white/40 hover:bg-white/10'
         }
         ${className}
-      `.trim()}
+      `.trim().replace(/\s+/g, ' ')}
     >
       <input
         ref={inputRef}
@@ -90,26 +90,30 @@ export function FileUpload({
       />
 
       {/* Upload icon */}
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-8 h-8 text-slate-400"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        strokeWidth={1.5}
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
-        />
-      </svg>
+      <div className={`p-4 rounded-2xl bg-white/5 border transition-colors ${isDragOver ? 'border-electric-blue text-electric-blue' : 'border-white/10 text-ghost/60'}`}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-8 h-8"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={1.5}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
+          />
+        </svg>
+      </div>
 
-      {fileName ? (
-        <p className="text-sm text-blue-400 font-medium">{fileName}</p>
-      ) : (
-        <p className="text-sm text-slate-400">{label}</p>
-      )}
+      <div>
+        {fileName ? (
+          <p className="text-sm text-electric-blue font-medium tracking-wide">{fileName}</p>
+        ) : (
+          <p className="text-sm text-ghost/60 font-medium tracking-wide">{label}</p>
+        )}
+      </div>
     </div>
   );
 }

@@ -29,22 +29,26 @@ export function SummaryCard({
   const speedLabel = getSpeedLabel(avgWpm);
 
   return (
-    <Card>
-      <h3 className="text-lg font-bold text-slate-50 mb-3">종합 요약</h3>
-      <p className="text-sm text-slate-300 leading-relaxed mb-4">{summary}</p>
+    <Card className="flex flex-col md:flex-row gap-8">
+      <div className="flex-1">
+        <h3 className="text-xl font-bold tracking-wide text-white mb-4">종합 요약 분석</h3>
+        <p className="text-base text-ghost/80 leading-relaxed font-sans">{summary}</p>
+      </div>
 
-      <div className="flex items-center gap-6 pt-3 border-t border-slate-700">
-        <div className="flex flex-col">
-          <span className="text-xs text-slate-400">평균 응답 시간</span>
-          <span className="text-sm font-medium text-slate-50">
+      <div className="w-px bg-white/10 hidden md:block" />
+
+      <div className="flex flex-row md:flex-col justify-around md:justify-center gap-6 md:min-w-[200px]">
+        <div className="flex flex-col items-center md:items-start text-center md:text-left gap-1">
+          <span className="text-sm tracking-wide text-ghost/50 font-semibold mb-1">평균 답변 시간</span>
+          <span className="text-3xl font-bold text-electric-blue font-data tracking-wider">
             {formatTime(Math.round(avgAnswerTime))}
           </span>
         </div>
 
-        <div className="flex flex-col">
-          <span className="text-xs text-slate-400">평균 WPM</span>
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-slate-50">
+        <div className="flex flex-col items-center md:items-start text-center md:text-left">
+          <span className="text-sm tracking-wide text-ghost/50 font-semibold mb-2">평균 발화 속도 (WPM)</span>
+          <div className="flex items-center gap-3">
+            <span className="text-3xl font-bold text-white font-data">
               {avgWpm}
             </span>
             <Badge variant={SPEED_BADGE_VARIANT[speedLabel]}>

@@ -5,33 +5,33 @@ interface SpeedSignalProps {
 }
 
 const SIGNALS = [
-  { key: 'fast', label: '빠름', activeColor: 'bg-amber-500', textColor: 'text-amber-400' },
-  { key: 'normal', label: '적정', activeColor: 'bg-emerald-500', textColor: 'text-emerald-400' },
-  { key: 'slow', label: '느림', activeColor: 'bg-red-500', textColor: 'text-red-400' },
+  { key: 'fast', label: '빠름', activeColor: 'bg-signal-red shadow-[0_0_15px_rgba(239,68,68,0.8)]', textColor: 'text-signal-red' },
+  { key: 'normal', label: '적정', activeColor: 'bg-emerald shadow-[0_0_15px_rgba(16,185,129,0.8)]', textColor: 'text-emerald' },
+  { key: 'slow', label: '느림', activeColor: 'bg-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.8)]', textColor: 'text-amber-400' },
 ] as const;
 
 export function SpeedSignal({ speedLabel }: SpeedSignalProps) {
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-6 bg-white/5 border border-white/10 px-6 py-3 rounded-full backdrop-blur-md">
       {SIGNALS.map((signal) => {
         const isActive = speedLabel === signal.key;
 
         return (
-          <div key={signal.key} className="flex items-center gap-1.5">
+          <div key={signal.key} className="flex items-center gap-2">
             <div
               className={`
-                rounded-full transition-all
+                rounded-full transition-all duration-300
                 ${isActive
-                  ? `w-3.5 h-3.5 ${signal.activeColor}`
-                  : 'w-2.5 h-2.5 bg-slate-600 opacity-30'
+                  ? `w-4 h-4 ${signal.activeColor} scale-110`
+                  : 'w-3 h-3 bg-white/20'
                 }
-              `.trim()}
+              `.trim().replace(/\s+/g, ' ')}
             />
             <span
               className={`
-                text-xs font-medium transition-colors
-                ${isActive ? signal.textColor : 'text-slate-600'}
-              `.trim()}
+                text-sm font-bold tracking-wide transition-colors duration-300
+                ${isActive ? signal.textColor : 'text-ghost/40'}
+              `.trim().replace(/\s+/g, ' ')}
             >
               {signal.label}
             </span>

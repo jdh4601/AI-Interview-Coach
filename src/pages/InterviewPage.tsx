@@ -10,8 +10,7 @@ import { TimerBar } from '../components/interview/TimerBar';
 import { StructureGuide } from '../components/interview/StructureGuide';
 import { SpeedSignal } from '../components/interview/SpeedSignal';
 import { QuestionCounter } from '../components/interview/QuestionCounter';
-import { RecordingIndicator } from '../components/interview/RecordingIndicator';
-import { Button } from '../components/ui/Button';
+import { MagneticButton } from '../components/ui/MagneticButton';
 import { LoadingSpinner } from '../components/ui/LoadingSpinner';
 import type { SpeedLabel } from '../types/question';
 
@@ -159,81 +158,105 @@ export default function InterviewPage() {
 
   if (!currentQuestion) {
     return (
-      <div className="flex h-screen items-center justify-center">
+      <div className="flex h-screen items-center justify-center bg-obsidian relative z-10">
         <LoadingSpinner size="lg" />
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center px-4">
-      <div className="w-full max-w-xl space-y-8">
+    <div className="flex flex-col h-[100dvh] w-full bg-obsidian overflow-hidden relative z-10 text-ghost">
+      
+      {/* HUD Elements */}
+      <div className="absolute top-8 w-full flex justify-between items-start px-8 pointer-events-none z-20">
         <QuestionCounter
           current={interview.currentIndex + 1}
           total={interview.questions.length}
         />
+        {(phase === 'recording' || phase === 'processing') && (
+          <SpeedSignal speedLabel={currentSpeedLabel} />
+        )}
+      </div>
 
-        <div className="flex flex-col items-center gap-6">
-          <InterviewerAvatar isSpeaking={phase === 'playing_tts'} />
+      {(phase === 'recording' || phase === 'processing') && (
+        <StructureGuide elapsedSeconds={timer.elapsedSeconds} />
+      )}
 
+      {/* Centerpiece */}
+      <div className="flex-1 flex flex-col items-center justify-center relative z-10 w-full mb-12">
+        <div className="mb-12 relative flex justify-center w-full">
+           <InterviewerAvatar isSpeaking={phase === 'playing_tts' || phase === 'recording'} />
+        </div>
+
+        <div className="h-16 flex items-center justify-center animate-in fade-in duration-500">
           {phase === 'playing_tts' && (
-            <p className="text-sm text-slate-400 animate-pulse">질문을 듣고 있습니다...</p>
+            <p className="text-lg font-drama italic text-electric-blue animate-pulse">질문을 듣는 중입니다...</p>
           )}
 
           {phase === 'waiting_start' && (
-            <p className="text-sm text-blue-400">답변을 시작해주세요</p>
+             <p className="text-lg font-drama italic text-ghost/70">준비가 되면 답변을 시작해주세요</p>
           )}
 
           {phase === 'processing' && (
-            <div className="flex items-center gap-2 text-slate-400">
+            <div className="flex items-center gap-3 text-ghost/70">
               <LoadingSpinner size="sm" />
-              <span className="text-sm">답변 분석 중...</span>
+              <span className="text-lg font-medium tracking-wide">답변 내용을 분석 및 처리 중입니다...</span>
             </div>
           )}
 
           {phase === 'transitioning' && (
-            <p className="text-sm text-emerald-400">다음 질문으로 이동합니다...</p>
+             <p className="text-lg font-drama italic text-emerald">다음 질문으로 이동합니다...</p>
           )}
         </div>
+      </div>
 
-        {(phase === 'recording' || phase === 'processing') && (
-          <>
-            <TimerBar remainingSeconds={timer.remainingSeconds} totalSeconds={ANSWER_TIME} />
-            <StructureGuide elapsedSeconds={timer.elapsedSeconds} />
-            <SpeedSignal speedLabel={currentSpeedLabel} />
-          </>
-        )}
-
-        <RecordingIndicator isRecording={phase === 'recording'} />
-
+      {/* Bottom Controls & Timer */}
+      <div className="absolute bottom-0 w-full p-8 flex flex-col items-center z-20 gap-6">
+        
         {audioRecorder.error && (
-          <div className="rounded-lg bg-red-900/30 border border-red-800 p-4 text-sm text-red-300">
-            <p className="font-medium mb-1">마이크 접근 오류</p>
+          <div className="rounded-xl bg-signal-red/10 border border-signal-red/20 p-4 text-sm text-signal-red text-center mb-4 backdrop-blur-md">
+            <p className="font-bold mb-1">시스템 권한 오류</p>
             <p>{audioRecorder.error}</p>
           </div>
         )}
 
         {interview.error && (
-          <p className="text-sm text-red-400 text-center">{interview.error}</p>
+          <div className="rounded-xl bg-signal-red/10 border border-signal-red/20 p-4 text-sm text-signal-red text-center mb-4 backdrop-blur-md">
+            <p className="font-bold mb-1">시스템 분석 시스템 오류</p>
+            <p>{interview.error}</p>
+          </div>
         )}
 
-        <div className="flex justify-center gap-4">
-          {phase === 'waiting_start' && (
-            <Button onClick={handleStartRecording} size="lg">
-              답변 시작
-            </Button>
-          )}
-          {phase === 'recording' && (
-            <Button onClick={handleStopRecording} variant="secondary" size="lg">
-              답변 완료
-            </Button>
-          )}
-          {(phase === 'waiting_start' || phase === 'recording') && (
-            <Button onClick={handleSkipQuestion} variant="ghost" size="sm">
-              {interview.isLastQuestion() ? '면접 종료' : '다음 질문'}
-            </Button>
-          )}
+        {phase === 'recording' && (
+          <div className="w-full max-w-4xl mx-auto">
+             <TimerBar remainingSeconds={timer.remainingSeconds} totalSeconds={ANSWER_TIME} />
+          </div>
+        )}
+
+        <div className="flex justify-center items-center gap-6 mt-2 relative w-full h-16">
+           <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-6">
+              {phase === 'waiting_start' && (
+                <MagneticButton onClick={handleStartRecording} className="px-10 py-4 text-lg bg-electric-blue text-white hover:bg-blue-600">
+                  답변 시작하기
+                </MagneticButton>
+              )}
+              
+              {phase === 'recording' && (
+                <MagneticButton onClick={handleStopRecording} variant="danger" className="px-10 py-4 text-lg">
+                  답변 완료
+                </MagneticButton>
+              )}
+           </div>
+
+           <div className="absolute right-0 flex items-center justify-end">
+              {(phase === 'waiting_start' || phase === 'recording') && (
+                <MagneticButton onClick={handleSkipQuestion} variant="ghost" className="text-sm px-6">
+                  {interview.isLastQuestion() ? '면접 조기 종료' : '질문 스킵하기'}
+                </MagneticButton>
+              )}
+           </div>
         </div>
+
       </div>
     </div>
   );

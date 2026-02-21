@@ -31,12 +31,12 @@ export function Card({
           : undefined
       }
       className={`
-        bg-slate-800 rounded-xl p-6
-        ${selected ? 'ring-2 ring-blue-500' : ''}
-        ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
-        ${isClickable ? 'hover:bg-slate-700/50 cursor-pointer' : ''}
+        rounded-[2rem] p-6 transition-all duration-300 border backdrop-blur-md
+        ${selected ? 'bg-white/10 border-electric-blue/50 shadow-[0_0_30px_rgba(59,130,246,0.15)] scale-[1.02]' : 'bg-white/5 border-white/10'}
+        ${disabled ? 'opacity-40 cursor-not-allowed grayscale' : ''}
+        ${isClickable && !selected ? 'hover:bg-white/[0.08] hover:border-white/20 cursor-pointer' : isClickable ? 'cursor-pointer' : ''}
         ${className}
-      `.trim()}
+      `.trim().replace(/\s+/g, ' ')}
     >
       {children}
     </div>

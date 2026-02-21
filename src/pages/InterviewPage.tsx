@@ -236,7 +236,7 @@ export default function InterviewPage() {
         <div className="flex justify-center items-center gap-6 mt-2 relative w-full h-16">
            <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-6">
               {phase === 'waiting_start' && (
-                <MagneticButton onClick={handleStartRecording} className="px-10 py-4 text-lg bg-electric-blue text-white hover:bg-blue-600">
+                <MagneticButton onClick={handleStartRecording} variant="accent" className="px-10 py-4 text-lg">
                   답변 시작하기
                 </MagneticButton>
               )}

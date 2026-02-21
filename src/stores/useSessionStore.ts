@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 import type { InterviewStyle, SessionStatus, VoiceGender } from '../types/session';
 
@@ -30,20 +31,27 @@ const initialState = {
   status: 'setup' as SessionStatus,
 };
 
-export const useSessionStore = create<SessionState>((set) => ({
-  ...initialState,
+export const useSessionStore = create<SessionState>()(
+  persist(
+    (set) => ({
+      ...initialState,
 
-  setCompany: (companyId, jobId) => set({ companyId, jobId }),
+      setCompany: (companyId, jobId) => set({ companyId, jobId }),
 
-  setResumeText: (text) => set({ resumeText: text }),
+      setResumeText: (text) => set({ resumeText: text }),
 
-  setQuestionCount: (count) => set({ questionCount: count }),
+      setQuestionCount: (count) => set({ questionCount: count }),
 
-  setInterviewStyle: (style) => set({ interviewStyle: style }),
+      setInterviewStyle: (style) => set({ interviewStyle: style }),
 
-  setVoiceGender: (gender) => set({ voiceGender: gender }),
+      setVoiceGender: (gender) => set({ voiceGender: gender }),
 
-  setStatus: (status) => set({ status }),
+      setStatus: (status) => set({ status }),
 
-  reset: () => set(initialState),
-}));
+      reset: () => set(initialState),
+    }),
+    {
+      name: 'ai-interview-session',
+    }
+  )
+);

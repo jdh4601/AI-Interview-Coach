@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSessionStore } from '../stores/useSessionStore';
 import { useInterviewStore } from '../stores/useInterviewStore';
@@ -15,6 +15,12 @@ export default function SessionConfigPage() {
   const interviewStore = useInterviewStore();
   const [isStarting, setIsStarting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!session.companyId || !session.jobId) {
+      navigate('/setup/company', { replace: true });
+    }
+  }, [session.companyId, session.jobId, navigate]);
 
   const questionOptions = Array.from({ length: 6 }, (_, i) => ({
     value: String(i + 5),

@@ -21,8 +21,12 @@ export default function InterviewCompletePage() {
   // (moved from InterviewPage to avoid InterviewGuard redirect race)
   const setSessionStatus = useSessionStore((s) => s.setStatus);
   useEffect(() => {
+    if (!session.companyId) {
+      navigate('/setup/company', { replace: true });
+      return;
+    }
     setSessionStatus('completed');
-  }, [setSessionStatus]);
+  }, [setSessionStatus, session.companyId, navigate]);
 
   async function handleGenerateReport() {
     setIsGenerating(true);
